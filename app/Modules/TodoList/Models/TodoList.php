@@ -24,4 +24,12 @@ class TodoList extends Model
            $list->created_at = Carbon::now();
         });
     }
+
+    public function setDescriptionAttribute($value){
+        $this->attributes['description'] = (strlen($value) > 0) ? $value : null;
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
 }

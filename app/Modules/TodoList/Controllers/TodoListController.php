@@ -4,6 +4,8 @@ namespace App\Modules\TodoList\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\TodoList\Contracts\TodoListRepository;
+use App\Modules\TodoList\Requests\CreateTodoListRequest;
+use App\Modules\TodoList\Requests\UpdateTodoListRequest;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -42,10 +44,10 @@ class TodoListController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateTodoListRequest|Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateTodoListRequest $request)
     {
         $todoList = $this->repository->create($request->only([
             'title','description'
@@ -78,11 +80,11 @@ class TodoListController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param UpdateTodoListRequest|Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTodoListRequest $request, $id)
     {
         $todoList = $this->repository->update($request->all(), $id);
         return response()->json($todoList, 200);

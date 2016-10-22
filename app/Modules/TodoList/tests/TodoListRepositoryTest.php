@@ -43,6 +43,16 @@ class TodoListRepositoryTest extends TestCase
         $this->seeInDatabase('todo_list',$todoList);
     }
 
+    public function testNullDescriptionOnEmptyString()
+    {
+        $todoList = [
+            'title' => str_random(200),
+            'description' => ''
+        ];
+        $todo = $this->repository->create($todoList, $this->user->id);
+        $this->assertNull($todo->description);
+    }
+
     public function testEditTodoList()
     {
         $todoList = factory(TodoList::class)->create();
