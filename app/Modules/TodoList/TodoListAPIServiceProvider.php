@@ -2,11 +2,13 @@
 
 namespace App\Modules\TodoList;
 
+use App\Modules\TodoList\Contracts\TodoItemRepository;
 use App\Modules\TodoList\Contracts\TodoListRepository;
 use App\Modules\TodoList\Http\CollectionResponse;
 use App\Modules\TodoList\Http\ItemResponse;
 use App\Modules\TodoList\Models\TodoList;
 use App\Modules\TodoList\Policies\TodoListPolicy;
+use App\Modules\TodoList\Repositories\EloquentTodoItemRepository;
 use App\Modules\TodoList\Repositories\EloquentTodoListRepository;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Support\Facades\Gate;
@@ -43,6 +45,12 @@ class TodoListAPIServiceProvider extends ServiceProvider
 
         $this->app->bind(TodoListRepository::class,
             EloquentTodoListRepository::class);
+        
+        $this->app->bind(TodoItemRepository::class,
+            EloquentTodoItemRepository::class);
+
+        $this->app->singleton(EloquentTodoListRepository::class);
+        $this->app->singleton(EloquentTodoItemRepository::class);
 
         $this->app->singleton(CollectionResponse::class);
         $this->app->singleton(ItemResponse::class);
