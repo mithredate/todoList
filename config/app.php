@@ -229,4 +229,7 @@ return [
 
     ],
 
+    'version' => '1.0',
+    'pagination_count' => 10
+
 ];

@@ -11,8 +11,6 @@ class TodoListControllerTest extends TestCase
 
     use DatabaseTransactions, WithoutMiddleware;
 
-    protected $headers = ['accept' => 'application/json'];
-
     protected $user;
 
     protected function setUp()
@@ -33,14 +31,12 @@ class TodoListControllerTest extends TestCase
 
     public function testCreateTodoList()
     {
-        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
-        $mock->shouldReceive('create')->once()->withAnyArgs()->andReturn(anInstanceOf(TodoList::class));
 
         $todoList = array_only(factory(TodoList::class)->make([
             'user_id' => null
         ])->toArray(), ['title','description']);
-        
-        $this->post('api/v1/list',$todoList,$this->headers);
+
+        $this->json('POST',action('\App\Modules\TodoList\Controllers\TodoListController@index'),$todoList);
 
         $this->assertResponseStatus(201);
 
@@ -48,8 +44,6 @@ class TodoListControllerTest extends TestCase
     }
 
     public function testEditTodoList(){
-        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
-        $mock->shouldReceive('update')->once()->withAnyArgs()->andReturn(anInstanceOf(TodoList::class));
 
         $todoList = factory(TodoList::class)->create([
             'user_id' => $this->user->id
@@ -58,7 +52,7 @@ class TodoListControllerTest extends TestCase
         $initial = $modified = array_only($todoList->toArray(),['title','description']);
         $modified['title'] = 'Updated todo list title';
 
-        $this->put('api/v1/list/' . $todoList->id,$modified,$this->headers);
+        $this->json('PUT',action('\App\Modules\TodoList\Controllers\TodoListController@show',['id' => $todoList->id]), $modified);
 
         $this->assertResponseStatus(200);
 
@@ -68,7 +62,7 @@ class TodoListControllerTest extends TestCase
     {
         $todoList = factory(TodoList::class)->create();
 
-        $this->put('api/v1/list/' . $todoList->id, ['title' => 'not authorized'], $this->headers);
+        $this->json('PUT',action('\App\Modules\TodoList\Controllers\TodoListController@show',['id' => $todoList->id]), ['title' => 'not authorized']);
 
         $this->assertResponseStatus(403);
     }
@@ -82,9 +76,9 @@ class TodoListControllerTest extends TestCase
         $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
         $mock->shouldReceive('delete')->once()->with($todoList->id)->andReturn(true);
 
-        $this->delete('api/v1/list/' . $todoList->id,[], $this->headers);
+        $this->json('DELETE',action('\App\Modules\TodoList\Controllers\TodoListController@show',['id' => $todoList->id]));
 
-        $this->assertResponseStatus(202);
+        $this->assertResponseStatus(204);
 
     }
 
@@ -103,7 +97,7 @@ class TodoListControllerTest extends TestCase
     }
 
     private function validate($method, $data, $uri, $message){
-        $this->$method($uri, $data, $this->headers);
+        $this->json($method,$uri, $data);
         $this->assertResponseStatus(422);
         $this->see($message);
     }
@@ -115,6 +109,14 @@ class TodoListControllerTest extends TestCase
             'user_id' => $this->user->id
         ]);
         $this->validate('put',['title' => str_random(200), 'description' => str_random(1200)],'api/v1/list/' . $list->id,'The description may not be greater than 1000 characters');
+    }
+
+    public function testIndex(){
+        factory(TodoList::class)->times(50)->create();
+//        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
+//        $mock->shouldReceive('paginate')->once()->withArgs([10,1]);
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index'));
+        $this->assertResponseStatus(200);
     }
 
 }

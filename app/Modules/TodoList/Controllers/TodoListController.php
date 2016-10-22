@@ -3,21 +3,20 @@
 namespace App\Modules\TodoList\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\TodoList\Contracts\TodoListRepository;
 use App\Modules\TodoList\Requests\CreateTodoListRequest;
 use App\Modules\TodoList\Requests\UpdateTodoListRequest;
+use App\Modules\TodoList\Services\TodoListService;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 
 class TodoListController extends Controller
 {
 
-    protected $repository;
+    protected $service;
 
-    public function __construct(TodoListRepository $repository)
+    public function __construct(TodoListService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
 
@@ -28,18 +27,11 @@ class TodoListController extends Controller
      */
     public function index()
     {
+        $response = $this->service->index();
 
+        return response()->collectionJson($response, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,10 +41,10 @@ class TodoListController extends Controller
      */
     public function store(CreateTodoListRequest $request)
     {
-        $todoList = $this->repository->create($request->only([
+        $response = $this->service->create($request->only([
             'title','description'
         ]), $request->user()->id);
-        return response()->json($todoList, 201);
+        return response()->collectionJson($response, 201);
     }
 
     /**
@@ -63,19 +55,9 @@ class TodoListController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -86,8 +68,8 @@ class TodoListController extends Controller
      */
     public function update(UpdateTodoListRequest $request, $id)
     {
-        $todoList = $this->repository->update($request->all(), $id);
-        return response()->json($todoList, 200);
+        $response = $this->service->update($request->all(), $id);
+        return response()->collectionJson($response, 200);
     }
 
     /**
@@ -98,7 +80,9 @@ class TodoListController extends Controller
      */
     public function destroy($id)
     {
-        $isRemoved = $this->repository->delete($id);
-        return response()->json("Entry " . ($isRemoved? "successfully" : "was not") . " removed!",202);
+        $response = $this->service->delete($id);
+        return response()->collectionJson($response,204);
     }
+
+   
 }

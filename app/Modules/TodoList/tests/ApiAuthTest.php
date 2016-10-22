@@ -8,15 +8,14 @@ class ApiAuthTest extends TestCase
 {
     public function testAuthentication()
     {
-        $headers = ['accept' => 'application/json'];
-        $this->get('api/v1/list', $headers)
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index'))
             ->see('Unauthenticated');
 
         $user = \App\User::find(1);
 
         $token = $user->api_token;
 
-        $this->call('GET','api/v1/list',['api_token' => $token],[],[],$headers);
-        $this->dontSee('Unauthenticated');
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index',['api_token' => $token]))
+            ->dontSee('Unauthenticated');
     }
 }

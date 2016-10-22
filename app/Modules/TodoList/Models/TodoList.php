@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class TodoList extends Model
 {
 
+    public static $template = [
+        ["name" => "title", "value" => "", "prompt" => "Title"],
+        ["name" => "description", "value" => "", "prompt" => "Description"],
+        ["name" => "created_by", "value" => "", "prompt" => ""],
+        ["name" => "created_at", "value" => "", "prompt" => ""]
+    ];
+
     protected $dates = ['created_at'];
 
     protected $fillable = ['title','description'];
@@ -31,5 +38,15 @@ class TodoList extends Model
 
     public function user(){
         return $this->belongsTo('App\User');
+    }
+
+    public function getCreatedByAttribute($value)
+    {
+        return $this->user->name;
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return ($value instanceof Carbon) ? $value->format('Y-m-d H:i:s') : $value;
     }
 }
