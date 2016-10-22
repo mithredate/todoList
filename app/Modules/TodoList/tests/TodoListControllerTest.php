@@ -58,4 +58,19 @@ class TodoListControllerTest extends TestCase
         $this->assertResponseStatus(200);
 
     }
+
+    public function testDeleteTodoList()
+    {
+        $todoList = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
+
+        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
+        $mock->shouldReceive('delete')->once()->with($todoList->id)->andReturn(true);
+
+        $this->call('DELETE','api/v1/list/' . $todoList->id,[],[],[],$this->headers);
+
+        $this->assertResponseStatus(202);
+
+    }
 }

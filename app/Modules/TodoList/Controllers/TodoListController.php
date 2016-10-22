@@ -96,6 +96,7 @@ class TodoListController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $isRemoved = $this->repository->delete($id);
+        return response()->json("Entry " . ($isRemoved? "successfully" : "was not") . " removed!",202);
     }
 }
