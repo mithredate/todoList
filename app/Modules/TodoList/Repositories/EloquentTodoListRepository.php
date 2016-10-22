@@ -24,4 +24,12 @@ class EloquentTodoListRepository implements TodoListRepository
         $todoList->save();
         return $todoList;
     }
+
+    public function update($data, $id)
+    {
+        $todoList = TodoList::find($id);
+        $todoList->fill($data);
+        $todoList->save();
+        return $todoList;
+    }
 }
