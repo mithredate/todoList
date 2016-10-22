@@ -6,5 +6,5 @@
  * Time: 1:45 PM
  */
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::resource('/','TodoListController');
+    Route::resource('list','TodoListController');
 });

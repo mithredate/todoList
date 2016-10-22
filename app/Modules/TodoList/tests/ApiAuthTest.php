@@ -9,14 +9,14 @@ class ApiAuthTest extends TestCase
     public function testAuthentication()
     {
         $headers = ['accept' => 'application/json'];
-        $this->get('api/v1', $headers)
+        $this->get('api/v1/list', $headers)
             ->see('Unauthenticated');
 
         $user = \App\User::find(1);
 
         $token = $user->api_token;
 
-        $this->call('GET','api/v1',['api_token' => $token],[],[],$headers);
+        $this->call('GET','api/v1/list',['api_token' => $token],[],[],$headers);
         $this->dontSee('Unauthenticated');
     }
 }

@@ -84,7 +84,8 @@ class TodoListController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $todoList = $this->repository->update($request->all(), $id);
+        return response()->json($todoList, 200);
     }
 
     /**
