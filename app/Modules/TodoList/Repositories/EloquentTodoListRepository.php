@@ -39,4 +39,15 @@ class EloquentTodoListRepository implements TodoListRepository
         $todoList->delete();
         return true;
     }
+
+    public function getAll()
+    {
+        $todoList = TodoList::all();
+        return $todoList;
+    }
+
+    public function paginate($count)
+    {
+        return TodoList::paginate($count);
+    }
 }

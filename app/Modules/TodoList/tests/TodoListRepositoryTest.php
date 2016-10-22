@@ -71,4 +71,16 @@ class TodoListRepositoryTest extends TestCase
         $this->assertTrue($deleted);
         $this->dontSeeInDatabase('todo_list',$todoList->toArray());
     }
+
+    public function testGetAllTodoList(){
+        $todoList = factory(TodoList::class)->times(50)->create();
+        $list = $this->repository->getAll();
+        $this->assertGreaterThan(50, $list->count());
+    }
+
+    public function testPaginateTodoList(){
+        $todoList = factory(TodoList::class)->times(50)->create();
+        $list = $this->repository->paginate(10);
+        $this->assertEquals(10, $list->count());
+    }
 }
