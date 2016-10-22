@@ -15,4 +15,6 @@ interface TodoListRepository
     public function create($data, $user_id);
 
     public function update($data, $id);
+
+    public function delete($id);
 }

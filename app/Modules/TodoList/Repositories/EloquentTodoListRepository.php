@@ -32,4 +32,11 @@ class EloquentTodoListRepository implements TodoListRepository
         $todoList->save();
         return $todoList;
     }
+
+    public function delete($id)
+    {
+        $todoList = TodoList::find($id);
+        $todoList->delete();
+        return true;
+    }
 }

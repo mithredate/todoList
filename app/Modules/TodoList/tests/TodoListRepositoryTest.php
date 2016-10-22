@@ -53,4 +53,12 @@ class TodoListRepositoryTest extends TestCase
         $this->seeInDatabase('todo_list',$modified);
         $this->dontSeeInDatabase('todo_list',$initial);
     }
+
+    public function testDeleteTodoList()
+    {
+        $todoList = factory(TodoList::class)->create();
+        $deleted = $this->repository->delete($todoList->id);
+        $this->assertTrue($deleted);
+        $this->dontSeeInDatabase('todo_list',$todoList->toArray());
+    }
 }
