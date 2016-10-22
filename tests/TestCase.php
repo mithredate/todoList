@@ -22,4 +22,17 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    protected function mock($class){
+        $mock = Mockery::mock($class);
+        $this->app->instance($class, $mock);
+        return $mock;
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Mockery::close();
+    }
 }
