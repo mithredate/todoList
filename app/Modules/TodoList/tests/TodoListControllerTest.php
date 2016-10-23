@@ -119,4 +119,11 @@ class TodoListControllerTest extends TestCase
         $this->assertResponseStatus(200);
     }
 
+    public function testShow()
+    {
+        $list = factory(TodoList::class)->create();
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@show',['list' => $list->id]));
+        $this->assertResponseStatus(200);
+    }
+
 }
