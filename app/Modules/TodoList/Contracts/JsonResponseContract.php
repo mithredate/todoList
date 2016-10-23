@@ -20,19 +20,21 @@ abstract class JsonResponseContract
 
     protected $template;
 
-
+    protected $additionalItemHrefParams;
     /**
      * @param $href
      * @param array $template
      * @param null $items
      * @param null $itemHref
+     * @param array $additionalItemHrefParams
      * @return array
      */
-    public function render($href, $template = [], $items = null, $itemHref = null){
+    public function render($href, $template = [], $items = null, $itemHref = null, $additionalItemHrefParams = []){
         $this->href = $href;
         $this->itemHref = $itemHref;
         $this->items = $items;
         $this->template = $template;
+        $this->additionalItemHrefParams = $additionalItemHrefParams;
         $response = $this->renderMinimalResponse();
         if($this->haveItems() && $this->haveItemHref()){
             $response['collection']['items'] = $this->renderItems();

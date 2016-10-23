@@ -44,7 +44,7 @@ class CollectionResponse extends JsonResponseContract
                 $data[$k]['value'] = $item->$value;
             }
             $items[] = [
-                'href' => action($this->itemHref, ['id' => $item->id]),
+                'href' => action($this->itemHref, array_merge(['id' => $item->id], $this->additionalItemHrefParams)),
                 'data' => $data
             ];
         }

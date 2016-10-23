@@ -11,6 +11,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ListItem extends Model
 {
+
+    public static $template = [
+      ['name' => 'title', 'value' => '', 'prompt' => 'Title'],
+      ['name' => 'description', 'value' => '', 'prompt' => 'Description'],
+      ['name' => 'position', 'value' => '', 'prompt' => 'Position'],
+      ['name' => 'priority', 'value' => '', 'prompt' => 'Priority'],
+      ['name' => 'reminder', 'value' => '', 'prompt' => 'Reminder'],
+    ];
+
     public $table = 'list_items';
 
     protected $dates = ['created_at','modified_at','reminder'];
