@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TodoItemRepositoryTest extends TestCase
+class ListItemRepositoryTest extends TestCase
 {
     protected $user;
     protected $repository;
