@@ -17,7 +17,8 @@ class EloquentListItemRepository implements ListItemRepository
 
     public function getAll()
     {
-        // TODO: Implement getAll() method.
+        $items = ListItem::all();
+        return $items;
     }
 
     public function paginate($count)

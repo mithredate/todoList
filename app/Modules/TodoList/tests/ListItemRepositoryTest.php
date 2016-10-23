@@ -4,6 +4,7 @@ use App\Modules\TodoList\Contracts\ListItemRepository;
 use App\Modules\TodoList\Models\ListItem;
 use App\Modules\TodoList\Models\TodoItemStatus\TodoListItem;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -83,5 +84,18 @@ class ListItemRepositoryTest extends TestCase
         $this->assertTrue($deleted);
 
         $this->dontSeeInDatabase('list_items',$initial);
+    }
+
+    public function testGetAll()
+    {
+        ListItem::where(\Illuminate\Support\Facades\DB::raw('1'))->delete();
+
+        $items = factory(ListItem::class)->times(50)->create();
+
+        $response = $this->repository->getAll();
+
+        $this->assertEquals($items->count(), 50);
+
+        $this->assertInstanceOf(Collection::class, $response);
     }
 }
