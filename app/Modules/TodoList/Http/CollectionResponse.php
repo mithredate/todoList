@@ -53,7 +53,7 @@ class CollectionResponse extends JsonResponseContract
 
     protected function renderLinks()
     {
-        $links = [];
+        $links = $this->additionalLinks;
         if ($this->items->nextPageUrl()) {
             $links[] = [
                 'rel' => 'next',
