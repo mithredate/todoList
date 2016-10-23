@@ -30,10 +30,11 @@ class EloquentListItemRepository implements ListItemRepository
         // TODO: Implement getOne() method.
     }
 
-    public function create($data, $user_id)
+    public function create($data, $user_id, $list_id)
     {
         $item = new ListItem();
         $item->created_by = $user_id;
+        $item->list_id = $list_id;
         $item->fill($data);
         $item->save();
         return $item;

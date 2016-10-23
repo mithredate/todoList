@@ -17,7 +17,7 @@ interface ListItemRepository
 
     public function getOne($id);
 
-    public function create($data, $user_id);
+    public function create($data, $user_id, $list_id);
 
     public function update($data, $id);
 

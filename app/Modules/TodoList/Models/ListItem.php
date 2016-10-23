@@ -51,6 +51,11 @@ class ListItem extends Model
         return $this->belongsTo(User::class,'modified_by','id');
     }
 
+    public function todoList()
+    {
+        return $this->belongsTo(TodoList::class,'list_id','id');
+    }
+
     // override the base Model function
     public function newFromBuilder($attributes = array(), $connection = NULL)
     {
