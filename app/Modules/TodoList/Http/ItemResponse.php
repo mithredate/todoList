@@ -21,7 +21,7 @@ class ItemResponse extends JsonResponseContract
 
     protected function haveLinks()
     {
-        return false;
+        return sizeof($this->additionalLinks) > 0;
     }
 
     protected function haveErrors()
@@ -50,7 +50,7 @@ class ItemResponse extends JsonResponseContract
 
     protected function renderLinks()
     {
-
+        return $this->additionalLinks;
     }
 
     protected function renderErrors()

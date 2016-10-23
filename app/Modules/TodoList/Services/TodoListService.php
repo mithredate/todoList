@@ -29,6 +29,7 @@ class TodoListService
 
     protected $create_href;
     protected $view_single_href;
+    protected $list_item_href;
     /**
      * @var CollectionResponse
      */
@@ -51,12 +52,13 @@ class TodoListService
         $this->itemResponse = $itemResponse;
         $this->create_href = action('\App\Modules\TodoList\Controllers\TodoListController@index');
         $this->view_single_href = '\App\Modules\TodoList\Controllers\TodoListController@show';
+        $this->list_item_href = '\App\Modules\TodoList\Controllers\ListItemController@index';
     }
 
     public function create($data, $user_id)
     {
         $todoList = $this->repository->create($data, $user_id);
-        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 
     public function index()
@@ -69,7 +71,7 @@ class TodoListService
     public function update($data, $list_id)
     {
         $todoList = $this->repository->update($data, $list_id);
-        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 
     public function delete($id)
@@ -81,7 +83,19 @@ class TodoListService
     public function get($list_id)
     {
         $todoList = $this->repository->getOne($list_id);
-        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
+    }
+
+    /**
+     * @param $todoList
+     * @return array
+     */
+    private function getListItemHref($todoList)
+    {
+        $links = [
+            ['rel' => 'items', 'href' => action($this->list_item_href, ['list' => $todoList->id]), 'render' => 'link']
+        ];
+        return $links;
     }
 
 }

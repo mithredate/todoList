@@ -30,6 +30,7 @@ class TodoListServiceTest extends TestCase
         $data = array_only($newList->toArray(),['title','description']);
         $response = $this->service->create($data, $newList->user_id);
         $this->validate($response);
+        $this->validateLinks($response);
     }
 
     public function testUpdate()
@@ -39,6 +40,7 @@ class TodoListServiceTest extends TestCase
         $data['title'] = 'modified data';
         $response = $this->service->update($data, $newList->id);
         $this->validate($response);
+        $this->validateLinks($response);
     }
 
     public function testDelete()
@@ -52,6 +54,7 @@ class TodoListServiceTest extends TestCase
         $list = factory(TodoList::class)->create();
         $response = $this->service->get($list->id);
         $this->validate($response);
+        $this->validateLinks($response);
     }
 
     /**
@@ -61,5 +64,13 @@ class TodoListServiceTest extends TestCase
         $this->assertArrayHasKey('collection',$response);
         $this->assertArrayHasKey('version',$response['collection']);
         $this->assertArrayHasKey('href',$response['collection']);
+    }
+
+    /**
+     * @param $response
+     */
+    private function validateLinks($response)
+    {
+        $this->assertArrayHasKey('links', $response['collection']);
     }
 }
