@@ -35,4 +35,27 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         Mockery::close();
     }
+
+    /**
+     * @param $response
+     */
+    protected function validateResponse($response){
+        $this->assertArrayHasKey('collection',$response);
+        $this->assertArrayHasKey('version',$response['collection']);
+        $this->assertArrayHasKey('href',$response['collection']);
+    }
+
+    /**
+     * @param $response
+     */
+    protected function validateResponseLinks($response)
+    {
+        $this->assertArrayHasKey('links', $response['collection']);
+    }
+
+    protected function validationTest($method, $data, $uri, $message){
+        $this->json($method,$uri, $data);
+        $this->assertResponseStatus(422);
+        $this->see($message);
+    }
 }

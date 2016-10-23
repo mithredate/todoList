@@ -84,31 +84,27 @@ class TodoListControllerTest extends TestCase
 
     private function validateTitleMaxLength()
     {
-        $this->validate('post',['title' => str_random(300)],'api/v1/list','The title may not be greater than 255 characters');
+        $this->validationTest('post',['title' => str_random(300)],'api/v1/list','The title may not be greater than 255 characters');
         $list = factory(TodoList::class)->create([
             'user_id' => $this->user->id
         ]);
-        $this->validate('put',['title' => str_random(300)],'api/v1/list/' . $list->id,'The title may not be greater than 255 characters');
+        $this->validationTest('put',['title' => str_random(300)],'api/v1/list/' . $list->id,'The title may not be greater than 255 characters');
     }
 
     private function validateTitleRequired()
     {
-        $this->validate('post',[],'api/v1/list','The title field is required');
+        $this->validationTest('post',[],'api/v1/list','The title field is required');
     }
 
-    private function validate($method, $data, $uri, $message){
-        $this->json($method,$uri, $data);
-        $this->assertResponseStatus(422);
-        $this->see($message);
-    }
+    
 
     private function validateDescriptionMaxLength()
     {
-        $this->validate('post',['title' => str_random(200), 'description' => str_random(1200)],'api/v1/list','The description may not be greater than 1000 characters');
+        $this->validationTest('post',['title' => str_random(200), 'description' => str_random(1200)],'api/v1/list','The description may not be greater than 1000 characters');
         $list = factory(TodoList::class)->create([
             'user_id' => $this->user->id
         ]);
-        $this->validate('put',['title' => str_random(200), 'description' => str_random(1200)],'api/v1/list/' . $list->id,'The description may not be greater than 1000 characters');
+        $this->validationTest('put',['title' => str_random(200), 'description' => str_random(1200)],'api/v1/list/' . $list->id,'The description may not be greater than 1000 characters');
     }
 
     public function testIndex(){

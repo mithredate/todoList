@@ -39,15 +39,8 @@ class ListItemServiceTest extends TestCase
 
         $response = $this->service->create($data, $this->list->id);
 
-        $this->validate($response);
+        $this->validateResponse($response);
     }
 
-    /**
-     * @param $response
-     */
-    private function validate($response){
-        $this->assertArrayHasKey('collection',$response);
-        $this->assertArrayHasKey('version',$response['collection']);
-        $this->assertArrayHasKey('href',$response['collection']);
-    }
+    
 }

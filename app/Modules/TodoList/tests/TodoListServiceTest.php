@@ -21,7 +21,7 @@ class TodoListServiceTest extends TestCase
     public function testIndexResponse()
     {
         $response = $this->service->index();
-        $this->validate($response);
+        $this->validateResponse($response);
     }
 
     public function testCreate()
@@ -29,8 +29,8 @@ class TodoListServiceTest extends TestCase
         $newList = factory(TodoList::class)->make();
         $data = array_only($newList->toArray(),['title','description']);
         $response = $this->service->create($data, $newList->user_id);
-        $this->validate($response);
-        $this->validateLinks($response);
+        $this->validateResponse($response);
+        $this->validateResponseLinks($response);
     }
 
     public function testUpdate()
@@ -39,8 +39,8 @@ class TodoListServiceTest extends TestCase
         $data = array_only($newList->toArray(),['title','description']);
         $data['title'] = 'modified data';
         $response = $this->service->update($data, $newList->id);
-        $this->validate($response);
-        $this->validateLinks($response);
+        $this->validateResponse($response);
+        $this->validateResponseLinks($response);
     }
 
     public function testDelete()
@@ -53,24 +53,10 @@ class TodoListServiceTest extends TestCase
     public function testShow(){
         $list = factory(TodoList::class)->create();
         $response = $this->service->get($list->id);
-        $this->validate($response);
-        $this->validateLinks($response);
+        $this->validateResponse($response);
+        $this->validateResponseLinks($response);
     }
 
-    /**
-     * @param $response
-     */
-    private function validate($response){
-        $this->assertArrayHasKey('collection',$response);
-        $this->assertArrayHasKey('version',$response['collection']);
-        $this->assertArrayHasKey('href',$response['collection']);
-    }
 
-    /**
-     * @param $response
-     */
-    private function validateLinks($response)
-    {
-        $this->assertArrayHasKey('links', $response['collection']);
-    }
+    
 }
