@@ -27,9 +27,11 @@ You can use `php artisan serve` at project's root folder and access the site at 
 
     http://localhost:8000/api/v1/list
 
-The authentication is based on `auth:api` guard and you have to send a `token_api` param along with the request or attach the following header:
+The authentication is based on `auth:api` guard and you have to send a `api_token` param along with the request or attach the following header:
 
     Authorization: Bearer $api_token
+
+The `api_token` sent either way should match the `api_token` column of the user in the database.
 
 
 
