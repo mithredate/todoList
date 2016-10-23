@@ -32,7 +32,6 @@ class TodoItemRepositoryTest extends TestCase
     public function testCreate()
     {
         $todoItem = factory(ListItem::class)->make([
-            'created_by' => $this->user->id,
             'list_id' => $this->list->id
         ]);
         $data = array_only(

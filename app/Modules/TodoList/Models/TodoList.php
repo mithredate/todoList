@@ -2,6 +2,7 @@
 
 namespace App\Modules\TodoList\Models;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,8 @@ class TodoList extends Model
         ["name" => "created_by", "value" => "", "prompt" => ""],
         ["name" => "created_at", "value" => "", "prompt" => ""]
     ];
+
+    protected $with = ['user'];
 
     protected $dates = ['created_at'];
 
@@ -37,7 +40,7 @@ class TodoList extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function getCreatedByAttribute($value)

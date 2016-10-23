@@ -33,7 +33,6 @@ class EloquentListItemRepository implements ListItemRepository
     public function create($data, $user_id, $list_id)
     {
         $item = new ListItem();
-        $item->created_by = $user_id;
         $item->list_id = $list_id;
         $item->fill($data);
         $item->save();

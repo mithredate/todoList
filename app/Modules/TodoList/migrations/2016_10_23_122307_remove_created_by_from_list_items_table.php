@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddListIdToListItemsTable extends Migration
+class RemoveCreatedByFromListItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddListIdToListItemsTable extends Migration
     public function up()
     {
         Schema::table('list_items', function (Blueprint $table) {
-            $table->integer('list_id')->unsigned();
-            $table->foreign('list_id')->references('id')->on('todo_list');
+            $table->dropForeign('list_items_created_by_foreign');
+            $table->dropColumn('created_by');
         });
     }
 
@@ -27,8 +27,8 @@ class AddListIdToListItemsTable extends Migration
     public function down()
     {
         Schema::table('list_items', function (Blueprint $table) {
-            $table->dropForeign('list_items_list_id_foreign');
-            $table->dropColumn('list_id');
+            $table->integer('created_by')->unsigned();
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 }

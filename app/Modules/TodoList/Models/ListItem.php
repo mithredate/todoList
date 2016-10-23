@@ -25,12 +25,14 @@ class ListItem extends Model
         '2' => DoneListItem::class,
     ];
 
+    protected $with = ['todoList','user'];
+
     public static function boot()
     {
         parent::boot();
 
         static::creating(function($item){
-            $item->modified_by = $item->created_by;
+            $item->modified_by = $item->user->id;
             $item->modified_at = $item->created_at = Carbon::now();
             foreach (array_flip($item->state) as $className => $statusCode){
                 if($item instanceof $className){
@@ -42,8 +44,13 @@ class ListItem extends Model
         });
     }
 
-    public function creator(){
-        return $this->belongsTo(User::class,'created_by','id');
+    public function user(){
+        $middle = $this->belongsTo(TodoList::class,'list_id','id');
+        return $middle->getResults()->belongsTo(User::class,'user_id','id');
+    }
+
+    public function getCreatedByAttribute($value){
+        return $this->user->name;
     }
 
     public function modifier()

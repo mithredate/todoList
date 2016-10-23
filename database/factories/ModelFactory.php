@@ -43,24 +43,14 @@ $factory->define(TodoList::class, function (Faker $faker){
 });
 
 $factory->define(ListItem::class, function(Faker $faker){
-    $user_id = null;
     return [
       'title' => $faker->text(255),
         'description' => $faker->paragraph(),
-        'created_by' => function() use (&$user_id){
-            $user_id = factory(User::class)->create()->id;
-            return $user_id;
-        },
         'priority' => random_int(1,3),
         'position' => ListItem::count(),
         'reminder' => Carbon::tomorrow(),
-        'list_id' => function() use ($user_id){
-            if(is_null($user_id)){
-                throw new Exception('Invalid user id for creating list in ModelFactory');
-            }
-            return factory(TodoList::class)->create([
-                'user_id' => $user_id
-            ]);
+        'list_id' => function(){
+            return factory(TodoList::class)->create()->id;
         }
     ];
 });

@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ListItemModelTest extends TestCase
 {
 
+    use DatabaseTransactions, WithoutMiddleware;
+
     protected $list;
     protected $user;
 
@@ -21,16 +23,29 @@ class ListItemModelTest extends TestCase
         $this->list = factory(TodoList::class)->create([
             'user_id' => $this->user->id
         ]);
+        $this->list->load('user');
 
     }
 
     public function testRelationships()
     {
         $item = factory(ListItem::class)->create([
-            'created_by' => $this->user->id,
             'list_id' => $this->list->id
         ]);
 
         $this->assertEquals($item->todoList->toArray(), $this->list->toArray());
+
+        $this->assertEquals($item->created_by, $this->list->created_by);
+
+        $this->assertEquals($item->created_at->format('Y-m-d H:i:s'), $item->modified_at->format('Y-m-d H:i:s'));
+
+        $this->assertInstanceOf(User::class, $item->modifier);
+
+        $this->assertEquals($item->modifier->name,
+            $this->user->name);
+
+        $this->assertInstanceOf(User::class,$item->user);
+
+        $this->assertEquals($item->user->id, $this->user->id);
     }
 }
