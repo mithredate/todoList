@@ -29,16 +29,16 @@ class ListItemControllerTest extends TestCase
 
     public function testCreate()
     {
-//        $item = factory(ListItem::class)->make([
-//            'list_id' => $this->list->id
-//        ]);
-//
-//        $data = array_only($item->toArray(),[
-//            'title','description','position','priority','reminder','list_id'
-//        ]);
-//
-//        $this->json('POST',action('\App\Modules\TodoList\Controllers\ListItemController@index'),$data);
-//
-//        $this->assertResponseStatus(201);
+        $item = factory(ListItem::class)->make([
+            'list_id' => $this->list->id
+        ]);
+
+        $data = array_only($item->toArray(),[
+            'title','description','position','priority','reminder'
+        ]);
+
+        $this->json('POST',action('\App\Modules\TodoList\Controllers\ListItemController@index',['list' => $this->list->id]),$data);
+
+        $this->assertResponseStatus(201);
     }
 }

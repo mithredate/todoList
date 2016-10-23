@@ -21,11 +21,12 @@ class ListItemController extends Controller
         $this->service = $service;
     }
 
-    public function index(){
+    public function index($list){
 
     }
 
-    public function store(Request $request){
-
+    public function store($list, Request $request){
+        $response = $this->service->create($request->all(), $list);
+        return response()->collectionJson($response, 201);
     }
 }
