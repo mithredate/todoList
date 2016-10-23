@@ -50,4 +50,9 @@ class EloquentTodoListRepository implements TodoListRepository
     {
         return TodoList::paginate($count);
     }
+
+    public function getOne($id)
+    {
+        return TodoList::find($id);
+    }
 }

@@ -84,4 +84,17 @@ class TodoListRepositoryTest extends TestCase
         $list = $this->repository->paginate(10);
         $this->assertEquals(10, $list->count());
     }
+
+    public function testGetOne()
+    {
+        $list = factory(TodoList::class)->create();
+
+        $list->load('user');
+
+        $response = $this->repository->getOne($list->id);
+
+        $this->assertInstanceOf(TodoList::class, $response);
+
+        $this->assertEquals($list->toArray(), $response->toArray());
+    }
 }
