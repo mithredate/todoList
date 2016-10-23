@@ -21,4 +21,6 @@ interface TodoListRepository
     public function getAll();
 
     public function paginate($count);
+
+    //TODO: add getOne
 }
