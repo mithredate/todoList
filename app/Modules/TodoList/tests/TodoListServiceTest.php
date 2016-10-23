@@ -48,6 +48,12 @@ class TodoListServiceTest extends TestCase
         $this->assertNull($response);
     }
 
+    public function testShow(){
+        $list = factory(TodoList::class)->create();
+        $response = $this->service->get($list->id);
+        $this->validate($response);
+    }
+
     /**
      * @param $response
      */

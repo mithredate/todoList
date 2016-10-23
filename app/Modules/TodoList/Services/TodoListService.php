@@ -78,4 +78,10 @@ class TodoListService
         return null;
     }
 
+    public function get($list_id)
+    {
+        $todoList = $this->repository->getOne($list_id);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
+    }
+
 }
