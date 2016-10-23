@@ -109,6 +109,17 @@ class ListItemRepositoryTest extends TestCase
         $this->assertInstanceOf(Paginator::class, $response);
     }
 
+    public function testGetOne(){
+        $item = factory(ListItem::class)->create();
+
+        $response = $this->repository->getOne($item->id);
+
+        $this->assertInstanceOf(ListItem::class, $response);
+
+        $this->assertEquals($response->id, $item->id);
+
+    }
+
 
     private function createListItems($count)
     {

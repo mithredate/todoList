@@ -28,7 +28,9 @@ class EloquentListItemRepository implements RepositoryContract
 
     public function getOne($id)
     {
-        // TODO: Implement getOne() method.
+        $item = ListItem::find($id);
+
+        return $item;
     }
 
     public function create($data)
