@@ -41,4 +41,11 @@ class ListItemControllerTest extends TestCase
 
         $this->assertResponseStatus(201);
     }
+
+    public function testIndex()
+    {
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\ListItemController@index',['list' => $this->list->id]));
+
+        $this->assertResponseStatus(200);
+    }
 }

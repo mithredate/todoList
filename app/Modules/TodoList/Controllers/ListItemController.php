@@ -22,7 +22,8 @@ class ListItemController extends Controller
     }
 
     public function index($list){
-
+        $response = $this->service->index($list);
+        return response()->collectionJson($response, 200);
     }
 
     public function store($list, Request $request){
