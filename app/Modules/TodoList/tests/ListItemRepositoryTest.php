@@ -31,11 +31,11 @@ class ListItemRepositoryTest extends TestCase
 
     public function testCreate()
     {
-        $todoItem = factory(ListItem::class)->make([
+        $listItem = factory(ListItem::class)->make([
             'list_id' => $this->list->id
         ]);
         $data = array_only(
-            $todoItem->toArray(),[
+            $listItem->toArray(),[
              'title','description','reminder','position','priority'
         ]);
         $item = $this->repository->create($data, $this->user->id, $this->list->id);
@@ -43,5 +43,25 @@ class ListItemRepositoryTest extends TestCase
         $todo = TodoListItem::orderBy('created_at','desc')->first();
         $this->assertInstanceOf(TodoListItem::class, $todo);
         $this->seeInDatabase('list_items',$data);
+    }
+
+    public function testUpdate()
+    {
+        $listItem = factory(ListItem::class)->create([
+            'list_id' => $this->list->id
+        ]);
+
+        $initial = array_only(
+            $listItem->toArray(),[
+            'title','description','reminder','position','priority'
+        ]);
+
+        $data = [
+            'title' => 'modified list item title'
+        ];
+
+        $modified = $this->repository->update($data, $listItem->id);
+
+        $this->seeInDatabase('list_items',array_merge($initial, $data));
     }
 }

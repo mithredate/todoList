@@ -41,7 +41,9 @@ class EloquentListItemRepository implements ListItemRepository
 
     public function update($data, $id)
     {
-        // TODO: Implement update() method.
+        $item = ListItem::find($id);
+        $item->update($data);
+        return $item;
     }
 
     public function delete($id)
