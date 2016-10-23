@@ -4,10 +4,12 @@ use App\Modules\TodoList\Contracts\ListItemRepository;
 use App\Modules\TodoList\Models\ListItem;
 use App\Modules\TodoList\Models\TodoItemStatus\TodoListItem;
 use App\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 
 class ListItemRepositoryTest extends TestCase
 {
@@ -88,14 +90,29 @@ class ListItemRepositoryTest extends TestCase
 
     public function testGetAll()
     {
-        ListItem::where(\Illuminate\Support\Facades\DB::raw('1'))->delete();
-
-        $items = factory(ListItem::class)->times(50)->create();
+        $this->createListItems(50);
 
         $response = $this->repository->getAll();
-
-        $this->assertEquals($items->count(), 50);
-
+        
         $this->assertInstanceOf(Collection::class, $response);
+    }
+
+    public function testPaginate()
+    {
+        $this->createListItems(50);
+
+        $response = $this->repository->paginate(config('app.pagination_count'));
+
+        $this->assertEquals($response->count(), config('app.pagination_count'));
+
+        $this->assertTrue($response->hasMorePages());
+
+        $this->assertInstanceOf(Paginator::class, $response);
+    }
+
+
+    private function createListItems($count)
+    {
+        return factory(ListItem::class)->times($count)->create();
     }
 }

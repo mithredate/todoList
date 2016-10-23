@@ -23,7 +23,7 @@ class EloquentListItemRepository implements ListItemRepository
 
     public function paginate($count)
     {
-        // TODO: Implement paginate() method.
+        return ListItem::paginate($count);
     }
 
     public function getOne($id)
