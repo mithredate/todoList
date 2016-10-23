@@ -41,7 +41,7 @@ class ListItemRepositoryTest extends TestCase
             $listItem->toArray(),[
              'title','description','reminder','position','priority'
         ]);
-        $item = $this->repository->create($data, $this->user->id, $this->list->id);
+        $item = $this->repository->create($data, $this->list->id);
         $this->assertInstanceOf(ListItem::class, $item);
         $todo = TodoListItem::orderBy('created_at','desc')->first();
         $this->assertInstanceOf(TodoListItem::class, $todo);
@@ -93,7 +93,7 @@ class ListItemRepositoryTest extends TestCase
         $this->createListItems(50);
 
         $response = $this->repository->getAll();
-        
+
         $this->assertInstanceOf(Collection::class, $response);
     }
 
