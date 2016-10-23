@@ -48,6 +48,8 @@ class EloquentListItemRepository implements ListItemRepository
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $item = ListItem::find($id);
+        $item->delete();
+        return true;
     }
 }

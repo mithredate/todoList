@@ -62,6 +62,26 @@ class ListItemRepositoryTest extends TestCase
 
         $modified = $this->repository->update($data, $listItem->id);
 
+        $this->assertInstanceOf(ListItem::class, $modified);
+
         $this->seeInDatabase('list_items',array_merge($initial, $data));
+    }
+
+    public function testDelete()
+    {
+        $listItem = factory(ListItem::class)->create([
+            'list_id' => $this->list->id
+        ]);
+
+        $initial = array_only(
+            $listItem->toArray(),[
+            'title','description','reminder','position','priority'
+        ]);
+
+        $deleted = $this->repository->delete($listItem->id);
+
+        $this->assertTrue($deleted);
+
+        $this->dontSeeInDatabase('list_items',$initial);
     }
 }
