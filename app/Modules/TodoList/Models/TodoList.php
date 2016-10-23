@@ -47,9 +47,4 @@ class TodoList extends Model
     {
         return $this->user->name;
     }
-
-    public function getCreatedAtAttribute($value)
-    {
-        return ($value instanceof Carbon) ? $value->format('Y-m-d H:i:s') : $value;
-    }
 }
