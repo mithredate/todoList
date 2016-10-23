@@ -42,5 +42,12 @@ class ListItemServiceTest extends TestCase
         $this->validateResponse($response);
     }
 
+    public function testIndex()
+    {
+        $response = $this->service->index($this->list->id);
+
+        $this->validateResponse($response);
+    }
+
     
 }
