@@ -53,7 +53,7 @@ class ListItemService implements ControllerServices
 
     public function index(){
         $list_id = func_get_arg(0);
-        $response = $this->repository->paginate(config('app.pagination_count'));
+        $response = $this->repository->paginate(config('app.pagination_count'), $list_id);
         return $this->collectionResponse->render($this->getCreateHref($list_id),ListItem::$template, $response, $this->item_href, ['list' => $list_id]);
     }
 
@@ -64,7 +64,9 @@ class ListItemService implements ControllerServices
 
     public function update($data, $id)
     {
-        // TODO: Implement update() method.
+        $response = $this->repository->update($data, $id);
+        $list_id = $response->todoList->id;
+        return $this->itemResponse->render($this->getCreateHref($list_id),ListItem::$template, $response, $this->item_href, ['list' => $list_id]);
     }
 
     public function delete($id)

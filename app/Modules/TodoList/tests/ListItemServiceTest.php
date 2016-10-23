@@ -49,5 +49,18 @@ class ListItemServiceTest extends TestCase
         $this->validateResponse($response);
     }
 
+    public function testUpdate()
+    {
+        $item = factory(ListItem::class)->create();
+
+        $data = [
+            'title' => 'modified title'
+        ];
+
+        $response = $this->service->update($data,$item->id);
+
+        $this->validateResponse($response);
+    }
+
     
 }

@@ -23,7 +23,8 @@ class EloquentListItemRepository implements RepositoryContract
 
     public function paginate($count)
     {
-        return ListItem::paginate($count);
+        $list_id = func_get_arg(1);
+        return ListItem::where('list_id',$list_id)->paginate($count);
     }
 
     public function getOne($id)

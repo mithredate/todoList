@@ -98,9 +98,9 @@ class ListItemRepositoryTest extends TestCase
 
     public function testPaginate()
     {
-        $this->createListItems(50);
+        $this->createListItems(50, ['list_id' => $this->list->id]);
 
-        $response = $this->repository->paginate(config('app.pagination_count'));
+        $response = $this->repository->paginate(config('app.pagination_count'), $this->list->id);
 
         $this->assertEquals($response->count(), config('app.pagination_count'));
 
@@ -121,8 +121,8 @@ class ListItemRepositoryTest extends TestCase
     }
 
 
-    private function createListItems($count)
+    private function createListItems($count, $override = [])
     {
-        return factory(ListItem::class)->times($count)->create();
+        return factory(ListItem::class)->times($count)->create($override);
     }
 }
