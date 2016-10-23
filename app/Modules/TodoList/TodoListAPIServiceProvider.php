@@ -2,7 +2,9 @@
 
 namespace App\Modules\TodoList;
 
+use App\Modules\TodoList\Contracts\ControllerServices;
 use App\Modules\TodoList\Contracts\ListItemRepository;
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Contracts\TodoListRepository;
 use App\Modules\TodoList\Http\CollectionResponse;
 use App\Modules\TodoList\Http\ItemResponse;
@@ -10,10 +12,16 @@ use App\Modules\TodoList\Models\TodoList;
 use App\Modules\TodoList\Policies\TodoListPolicy;
 use App\Modules\TodoList\Repositories\EloquentListItemRepository;
 use App\Modules\TodoList\Repositories\EloquentTodoListRepository;
+use App\Modules\TodoList\Services\ListItemService;
+use App\Modules\TodoList\Services\TodoListService;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use ListItemRepositoryTest;
+use ListItemServiceTest;
+use TodoListRepositoryTest;
+use TodoListServiceTest;
 
 class TodoListAPIServiceProvider extends ServiceProvider
 {
@@ -21,6 +29,21 @@ class TodoListAPIServiceProvider extends ServiceProvider
     protected $policies = [
         TodoList::class => TodoListPolicy::class
     ];
+
+    protected $bindings = [
+        ListItemService::class => [RepositoryContract::class => EloquentListItemRepository::class],
+        TodoListService::class => [RepositoryContract::class => EloquentTodoListRepository::class],
+    ];
+
+    protected $singleton = [
+        EloquentTodoListRepository::class,
+        EloquentListItemRepository::class,
+        CollectionResponse::class,
+        ItemResponse::class,
+        ListItemService::class,
+        TodoListService::class
+    ];
+
 
     protected $namespace = 'App\Modules\TodoList\Controllers';
 
@@ -43,17 +66,15 @@ class TodoListAPIServiceProvider extends ServiceProvider
             require dirname(__FILE__) . '/routes.php';
         });
 
-        $this->app->bind(TodoListRepository::class,
-            EloquentTodoListRepository::class);
-        
-        $this->app->bind(ListItemRepository::class,
-            EloquentListItemRepository::class);
+        foreach($this->bindings as $when => $array){
+            foreach ($array as $needs => $give){
+                $this->app->when($when)->needs($needs)->give($give);
+            }
+        }
 
-        $this->app->singleton(EloquentTodoListRepository::class);
-        $this->app->singleton(EloquentListItemRepository::class);
-
-        $this->app->singleton(CollectionResponse::class);
-        $this->app->singleton(ItemResponse::class);
+        foreach ($this->singleton as $className){
+            $this->app->singleton($className);
+        }
 
         $factory->macro('collectionJson',function($value, $status) use ($factory){
            return $factory->make(json_encode($value))

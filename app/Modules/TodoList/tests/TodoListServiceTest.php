@@ -1,6 +1,8 @@
 <?php
 
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Models\TodoList;
+use App\Modules\TodoList\Services\TodoListService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -15,7 +17,7 @@ class TodoListServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app['\App\Modules\TodoList\Services\TodoListService'];
+        $this->service = resolve(TodoListService::class);
     }
 
     public function testIndexResponse()
@@ -52,7 +54,7 @@ class TodoListServiceTest extends TestCase
 
     public function testShow(){
         $list = factory(TodoList::class)->create();
-        $response = $this->service->get($list->id);
+        $response = $this->service->show($list->id);
         $this->validateResponse($response);
         $this->validateResponseLinks($response);
     }

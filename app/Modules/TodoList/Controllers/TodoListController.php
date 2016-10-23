@@ -55,7 +55,7 @@ class TodoListController extends Controller
      */
     public function show($id)
     {
-        $response = $this->service->get($id);
+        $response = $this->service->show($id);
         return response()->collectionJson($response, 200);
     }
 

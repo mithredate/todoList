@@ -9,10 +9,10 @@
 namespace App\Modules\TodoList\Repositories;
 
 
-use App\Modules\TodoList\Contracts\ListItemRepository;
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Models\ListItem;
 
-class EloquentListItemRepository implements ListItemRepository
+class EloquentListItemRepository implements RepositoryContract
 {
 
     public function getAll()
@@ -31,8 +31,9 @@ class EloquentListItemRepository implements ListItemRepository
         // TODO: Implement getOne() method.
     }
 
-    public function create($data, $list_id)
+    public function create($data)
     {
+        $list_id = func_get_arg(1);
         $item = new ListItem();
         $item->list_id = $list_id;
         $item->fill($data);

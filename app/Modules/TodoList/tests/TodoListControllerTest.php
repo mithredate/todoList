@@ -17,7 +17,7 @@ class TodoListControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::first();
+        $this->user = factory(User::class)->create();
 
         $this->actingAs($this->user);
     }
@@ -73,7 +73,7 @@ class TodoListControllerTest extends TestCase
             'user_id' => $this->user->id
         ]);
 
-        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
+        $mock = $this->mock(\App\Modules\TodoList\Contracts\RepositoryContract::class);
         $mock->shouldReceive('delete')->once()->with($todoList->id)->andReturn(true);
 
         $this->json('DELETE',action('\App\Modules\TodoList\Controllers\TodoListController@show',['id' => $todoList->id]));
@@ -96,7 +96,7 @@ class TodoListControllerTest extends TestCase
         $this->validationTest('post',[],'api/v1/list','The title field is required');
     }
 
-    
+
 
     private function validateDescriptionMaxLength()
     {
@@ -109,8 +109,6 @@ class TodoListControllerTest extends TestCase
 
     public function testIndex(){
         factory(TodoList::class)->times(50)->create();
-//        $mock = $this->mock(\App\Modules\TodoList\Contracts\TodoListRepository::class);
-//        $mock->shouldReceive('paginate')->once()->withArgs([10,1]);
         $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index'));
         $this->assertResponseStatus(200);
     }

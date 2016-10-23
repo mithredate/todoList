@@ -9,15 +9,15 @@
 namespace App\Modules\TodoList\Repositories;
 
 
-use App\Modules\TodoList\Contracts\TodoListRepository;
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Models\TodoList;
-use Illuminate\Http\Request;
 
-class EloquentTodoListRepository implements TodoListRepository
+class EloquentTodoListRepository implements RepositoryContract
 {
 
-    public function create($data, $user_id)
+    public function create($data)
     {
+        $user_id = func_get_arg(1);
         $todoList = new TodoList();
         $todoList->user_id = $user_id;
         $todoList->fill($data);

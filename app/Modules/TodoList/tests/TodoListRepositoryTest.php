@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\TodoList\Contracts\TodoListRepository;
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Models\TodoList;
 use App\Modules\TodoList\Repositories\EloquentTodoListRepository;
 use App\User;
@@ -25,7 +25,7 @@ class TodoListRepositoryTest extends TestCase
 
         $this->user = factory(User::class)->create();
 
-        $this->repository = resolve(TodoListRepository::class);
+        $this->repository = resolve(EloquentTodoListRepository::class);
     }
 
     public function testCreateTodoList()

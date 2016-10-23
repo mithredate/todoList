@@ -1,15 +1,14 @@
 <?php
 
-use App\Modules\TodoList\Contracts\ListItemRepository;
 use App\Modules\TodoList\Models\ListItem;
 use App\Modules\TodoList\Models\TodoItemStatus\TodoListItem;
+use App\Modules\TodoList\Repositories\EloquentListItemRepository;
 use App\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 
 class ListItemRepositoryTest extends TestCase
 {
@@ -29,7 +28,7 @@ class ListItemRepositoryTest extends TestCase
             'user_id' => $this->user->id
         ]);
 
-        $this->repository = resolve(ListItemRepository::class);
+        $this->repository = resolve(EloquentListItemRepository::class);
     }
 
     public function testCreate()

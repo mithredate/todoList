@@ -9,23 +9,17 @@
 namespace App\Modules\TodoList\Services;
 
 
-use App\Modules\TodoList\Contracts\TodoListRepository;
+use App\Modules\TodoList\Contracts\ControllerServices;
+use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Http\CollectionResponse;
 use App\Modules\TodoList\Http\ItemResponse;
 use App\Modules\TodoList\Models\TodoList;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
-class TodoListService
+
+class TodoListService implements ControllerServices
 {
 
     protected $repository;
-
-    protected $request;
-
-    protected $app;
 
     protected $create_href;
     protected $view_single_href;
@@ -39,15 +33,11 @@ class TodoListService
      */
     private $itemResponse;
 
-    public function __construct(TodoListRepository $repository,
-                                Request $request,
-                                Application $app,
+    public function __construct(RepositoryContract $repository,
                                 CollectionResponse $collectionResponse,
                                 ItemResponse $itemResponse)
     {
-        $this->app = $app;
         $this->repository = $repository;
-        $this->request = $request;
         $this->collectionResponse = $collectionResponse;
         $this->itemResponse = $itemResponse;
         $this->create_href = action('\App\Modules\TodoList\Controllers\TodoListController@index');
@@ -55,8 +45,9 @@ class TodoListService
         $this->list_item_href = '\App\Modules\TodoList\Controllers\ListItemController@index';
     }
 
-    public function create($data, $user_id)
+    public function create($data)
     {
+        $user_id = func_get_arg(1);
         $todoList = $this->repository->create($data, $user_id);
         return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
@@ -68,9 +59,9 @@ class TodoListService
 
     }
 
-    public function update($data, $list_id)
+    public function update($data, $id)
     {
-        $todoList = $this->repository->update($data, $list_id);
+        $todoList = $this->repository->update($data, $id);
         return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 
@@ -80,9 +71,9 @@ class TodoListService
         return null;
     }
 
-    public function get($list_id)
+    public function show($id)
     {
-        $todoList = $this->repository->getOne($list_id);
+        $todoList = $this->repository->getOne($id);
         return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 

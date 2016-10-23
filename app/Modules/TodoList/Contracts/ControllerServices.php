@@ -3,21 +3,19 @@
  * Created by PhpStorm.
  * User: mithredate
  * Date: 10/23/2016
- * Time: 12:15 AM
+ * Time: 4:15 PM
  */
 
 namespace App\Modules\TodoList\Contracts;
 
 
-interface ListItemRepository
+interface ControllerServices
 {
-    public function getAll();
+    public function index();
 
-    public function paginate($count);
+    public function show($id);
 
-    public function getOne($id);
-
-    public function create($data, $list_id);
+    public function create($data);
 
     public function update($data, $id);
 
