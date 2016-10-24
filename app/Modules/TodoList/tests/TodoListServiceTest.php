@@ -19,10 +19,9 @@ class TodoListServiceTest extends TestCase
         parent::setUp();
 
         $this->user = factory(\App\User::class)->create();
-        
-        $this->service = resolve(TodoListService::class);
 
-        $this->service->setUser($this->user);
+        $this->service = resolve(TodoListService::class,['user' => $this->user]);
+
     }
 
     public function testIndexResponse()

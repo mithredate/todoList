@@ -44,7 +44,6 @@ class TodoListAPIServiceProvider extends ServiceProvider
         CollectionResponse::class,
         ItemResponse::class,
         ListItemService::class,
-        TodoListService::class
     ];
 
 
@@ -78,8 +77,7 @@ class TodoListAPIServiceProvider extends ServiceProvider
         $this->app->when(TodoListController::class)
             ->needs(ControllerServices::class)
             ->give(function($app){
-                $service = resolve(TodoListService::class);
-                $service->setUser(Auth::user());
+                $service = resolve(TodoListService::class, ['user' => Auth::user()]);
                 return $service;
             });
 

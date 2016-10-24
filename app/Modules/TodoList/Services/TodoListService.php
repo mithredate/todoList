@@ -40,10 +40,7 @@ class TodoListService implements ControllerServices
      * @var ItemResponse
      */
     private $itemResponse;
-    /**
-     * @var TodoListPolicy
-     */
-    private $policy;
+
     /**
      * @var ErrorResponse
      */
@@ -52,7 +49,8 @@ class TodoListService implements ControllerServices
     public function __construct(RepositoryContract $repository,
                                 CollectionResponse $collectionResponse,
                                 ItemResponse $itemResponse,
-                                ErrorResponse $errorResponse)
+                                ErrorResponse $errorResponse,
+                                User $user = null)
     {
         $this->repository = $repository;
         $this->collectionResponse = $collectionResponse;
@@ -61,12 +59,9 @@ class TodoListService implements ControllerServices
         $this->view_single_href = '\App\Modules\TodoList\Controllers\TodoListController@show';
         $this->list_item_href = '\App\Modules\TodoList\Controllers\ListItemController@index';
         $this->errorResponse = $errorResponse;
-    }
-
-    public function setUser(User $user = null)
-    {
         $this->user = $user;
     }
+
 
     public function create($data)
     {

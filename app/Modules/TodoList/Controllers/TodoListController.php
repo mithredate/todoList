@@ -18,7 +18,6 @@ class TodoListController extends Controller
     public function __construct(ControllerServices $service)
     {
         $this->service = $service;
-//        $this->service->setUser($request->user());
     }
 
 
