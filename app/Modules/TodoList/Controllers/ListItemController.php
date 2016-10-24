@@ -30,4 +30,10 @@ class ListItemController extends Controller
         $response = $this->service->create($request->all(), $list);
         return response()->collectionJson($response, 201);
     }
+
+    public function update($list, $items, Request $request)
+    {
+        $response = $this->service->update($request->all(), $items);
+        return response()->collectionJson($response, 200);
+    }
 }
