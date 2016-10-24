@@ -24,12 +24,11 @@ class TodoListController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $response = $this->service->index($request->user()->id);
+        $response = $this->service->index();
 
         return response()->collectionJson($response, 200);
     }
@@ -45,7 +44,7 @@ class TodoListController extends Controller
     {
         $response = $this->service->create($request->only([
             'title','description'
-        ]), $request->user()->id);
+        ]));
         return response()->collectionJson($response, 201);
     }
 
@@ -72,20 +71,19 @@ class TodoListController extends Controller
      */
     public function update(UpdateTodoListRequest $request, $id)
     {
-        $response = $this->service->update($request->all(), $id, $request->user());
+        $response = $this->service->update($request->all(), $id);
         return response()->collectionJson($response, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $response = $this->service->delete($id, $request->user());
+        $response = $this->service->delete($id);
         return response()->collectionJson($response,204);
     }
 
