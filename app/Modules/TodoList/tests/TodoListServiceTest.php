@@ -70,8 +70,18 @@ class TodoListServiceTest extends TestCase
         $newList = factory(TodoList::class)->create([
             'user_id' => $this->user->id
         ]);
-        $response = $this->service->delete($newList->id);
+        $response = $this->service->delete($newList->id, $this->user);
         $this->assertNull($response);
+    }
+
+    public function testUnauthorizedDelete()
+    {
+        $list = factory(TodoList::class)->create();
+
+        $response = $this->service->delete($list->id, $this->user);
+
+        $this->validateResponse($response);
+        $this->validateResponseError($response);
     }
 
     public function testShow(){

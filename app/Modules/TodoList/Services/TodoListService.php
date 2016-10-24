@@ -88,8 +88,14 @@ class TodoListService implements ControllerServices
 
     public function delete($id)
     {
-        $this->repository->delete($id);
-        return null;
+        try {
+            $user = func_get_arg(1);
+            $this->authorize('delete',$user,$id);
+            $this->repository->delete($id);
+            return null;
+        } catch (\Exception $e){
+            return $this->prepareErrorResponse($e);
+        }
     }
 
     public function show($id)
