@@ -26,7 +26,7 @@ class TodoListServiceTest extends TestCase
 
     public function testIndexResponse()
     {
-        $response = $this->service->index($this->user->id);
+        $response = $this->service->index();
         $this->validateResponse($response);
     }
 
@@ -36,7 +36,7 @@ class TodoListServiceTest extends TestCase
             'user_id' => $this->user->id
         ]);
         $data = array_only($newList->toArray(),['title','description']);
-        $response = $this->service->create($data, $newList->user_id);
+        $response = $this->service->create($data);
         $this->validateResponse($response);
         $this->validateResponseLinks($response);
     }
@@ -48,7 +48,7 @@ class TodoListServiceTest extends TestCase
         ]);
         $data = array_only($newList->toArray(),['title','description']);
         $data['title'] = 'modified data';
-        $response = $this->service->update($data, $newList->id, $this->user);
+        $response = $this->service->update($data, $newList->id);
         $this->validateResponse($response);
         $this->validateResponseLinks($response);
     }
@@ -59,7 +59,7 @@ class TodoListServiceTest extends TestCase
 
         $data['title'] = 'modified data';
 
-        $response = $this->service->update($data,$list->id, $this->user);
+        $response = $this->service->update($data,$list->id);
 
         $this->validateResponse($response);
         
@@ -71,7 +71,7 @@ class TodoListServiceTest extends TestCase
         $newList = factory(TodoList::class)->create([
             'user_id' => $this->user->id
         ]);
-        $response = $this->service->delete($newList->id, $this->user);
+        $response = $this->service->delete($newList->id);
         $this->assertNull($response);
     }
 
@@ -79,7 +79,7 @@ class TodoListServiceTest extends TestCase
     {
         $list = factory(TodoList::class)->create();
 
-        $response = $this->service->delete($list->id, $this->user);
+        $response = $this->service->delete($list->id);
 
         $this->validateResponse($response);
         $this->validateResponseError($response);
