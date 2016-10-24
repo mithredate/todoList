@@ -73,5 +73,16 @@ class ListItemServiceTest extends TestCase
         $this->validateResponse($response);
     }
 
+    public function testDelete()
+    {
+        $item = factory(ListItem::class)->create([
+            'list_id' => $this->list->id
+        ]);
+
+        $response = $this->service->delete($item->id);
+
+        $this->assertNull($response);
+    }
+
     
 }

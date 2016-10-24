@@ -73,7 +73,8 @@ class ListItemService implements ControllerServices
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $this->repository->delete($id);
+        return null;
     }
 
     /**
