@@ -59,7 +59,9 @@ class ListItemService implements ControllerServices
 
     public function show($id)
     {
-        // TODO: Implement show() method.
+        $response = $this->repository->getOne($id);
+        $list_id = $response->todoList->id;
+        return $this->itemResponse->render($this->getCreateHref($list_id),ListItem::$template, $response, $this->item_href, ['list' => $list_id]);
     }
 
     public function update($data, $id)
