@@ -22,6 +22,7 @@ abstract class JsonResponseContract
 
     protected $additionalItemHrefParams;
     protected $additionalLinks;
+    protected $error;
 
     /**
      * @param $href
@@ -29,16 +30,18 @@ abstract class JsonResponseContract
      * @param null $items
      * @param null $itemHref
      * @param array $additionalItemHrefParams
-     * @param $additionalLinks
+     * @param array $additionalLinks
+     * @param array $error
      * @return array
      */
-    public function render($href, $template = [], $items = null, $itemHref = null, $additionalItemHrefParams = [], $additionalLinks = []){
+    public function render($href, $template = [], $items = null, $itemHref = null, $additionalItemHrefParams = [], $additionalLinks = [], $error = []){
         $this->href = $href;
         $this->itemHref = $itemHref;
         $this->items = $items;
         $this->template = $template;
         $this->additionalItemHrefParams = $additionalItemHrefParams;
         $this->additionalLinks = $additionalLinks;
+        $this->error = $error;
         $response = $this->renderMinimalResponse();
         if($this->haveItems() && $this->haveItemHref()){
             $response['collection']['items'] = $this->renderItems();

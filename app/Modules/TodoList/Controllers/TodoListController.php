@@ -71,7 +71,7 @@ class TodoListController extends Controller
      */
     public function update(UpdateTodoListRequest $request, $id)
     {
-        $response = $this->service->update($request->all(), $id);
+        $response = $this->service->update($request->all(), $id, $request->user());
         return response()->collectionJson($response, 200);
     }
 

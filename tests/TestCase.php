@@ -58,4 +58,9 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         $this->assertResponseStatus(422);
         $this->see($message);
     }
+
+    protected function validateResponseError($response)
+    {
+        $this->assertArrayHasKey('error',$response['collection']);
+    }
 }

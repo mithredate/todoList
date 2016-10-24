@@ -47,9 +47,22 @@ class TodoListServiceTest extends TestCase
         ]);
         $data = array_only($newList->toArray(),['title','description']);
         $data['title'] = 'modified data';
-        $response = $this->service->update($data, $newList->id);
+        $response = $this->service->update($data, $newList->id, $this->user);
         $this->validateResponse($response);
         $this->validateResponseLinks($response);
+    }
+
+    public function testUnauthorizedUpdate()
+    {
+        $list = factory(TodoList::class)->create();
+
+        $data['title'] = 'modified data';
+
+        $response = $this->service->update($data,$list->id, $this->user);
+
+        $this->validateResponse($response);
+        
+        $this->validateResponseError($response);
     }
 
     public function testDelete()
@@ -70,6 +83,7 @@ class TodoListServiceTest extends TestCase
         $this->validateResponseLinks($response);
     }
 
-
     
+
+
 }

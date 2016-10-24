@@ -19,7 +19,7 @@ class TodoListPolicy
      */
     public function view(User $user, TodoList $todoList)
     {
-        //
+        return $user->id === $todoList->user_id;
     }
 
     /**
@@ -42,7 +42,7 @@ class TodoListPolicy
      */
     public function update(User $user, TodoList $todoList)
     {
-        return $user->id == $todoList->user_id;
+        return $user->id === $todoList->user_id;
     }
 
     /**
@@ -54,6 +54,6 @@ class TodoListPolicy
      */
     public function delete(User $user, TodoList $todoList)
     {
-        return $user->id == $todoList->user_id;
+        return $user->id === $todoList->user_id;
     }
 }
