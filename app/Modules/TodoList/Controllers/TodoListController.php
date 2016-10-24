@@ -23,11 +23,12 @@ class TodoListController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = $this->service->index();
+        $response = $this->service->index($request->user()->id);
 
         return response()->collectionJson($response, 200);
     }

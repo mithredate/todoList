@@ -54,7 +54,8 @@ class TodoListService implements ControllerServices
 
     public function index()
     {
-        $todoList = $this->repository->paginate(config('app.pagination_count'));
+        $user_id = func_get_arg(0);
+        $todoList = $this->repository->paginate(config('app.pagination_count'), $user_id);
         return $this->collectionResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
 
     }

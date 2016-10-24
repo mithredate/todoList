@@ -80,9 +80,12 @@ class TodoListRepositoryTest extends TestCase
     }
 
     public function testPaginateTodoList(){
-        $todoList = factory(TodoList::class)->times(50)->create();
-        $list = $this->repository->paginate(10);
+        $todoList = factory(TodoList::class)->times(50)->create([
+            'user_id' => $this->user->id
+        ]);
+        $list = $this->repository->paginate(10, $this->user->id);
         $this->assertEquals(10, $list->count());
+        $this->assertEquals(50, $list->total());
     }
 
     public function testGetOne()

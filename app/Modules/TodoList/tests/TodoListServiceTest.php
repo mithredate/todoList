@@ -12,23 +12,28 @@ class TodoListServiceTest extends TestCase
     use DatabaseTransactions, WithoutMiddleware;
 
     protected $service;
+    protected $user;
 
     public function setUp()
     {
         parent::setUp();
+
+        $this->user = factory(\App\User::class)->create();
 
         $this->service = resolve(TodoListService::class);
     }
 
     public function testIndexResponse()
     {
-        $response = $this->service->index();
+        $response = $this->service->index($this->user->id);
         $this->validateResponse($response);
     }
 
     public function testCreate()
     {
-        $newList = factory(TodoList::class)->make();
+        $newList = factory(TodoList::class)->make([
+            'user_id' => $this->user->id
+        ]);
         $data = array_only($newList->toArray(),['title','description']);
         $response = $this->service->create($data, $newList->user_id);
         $this->validateResponse($response);
@@ -37,7 +42,9 @@ class TodoListServiceTest extends TestCase
 
     public function testUpdate()
     {
-        $newList = factory(TodoList::class)->create();
+        $newList = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
         $data = array_only($newList->toArray(),['title','description']);
         $data['title'] = 'modified data';
         $response = $this->service->update($data, $newList->id);
@@ -47,13 +54,17 @@ class TodoListServiceTest extends TestCase
 
     public function testDelete()
     {
-        $newList = factory(TodoList::class)->create();
+        $newList = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
         $response = $this->service->delete($newList->id);
         $this->assertNull($response);
     }
 
     public function testShow(){
-        $list = factory(TodoList::class)->create();
+        $list = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
         $response = $this->service->show($list->id);
         $this->validateResponse($response);
         $this->validateResponseLinks($response);

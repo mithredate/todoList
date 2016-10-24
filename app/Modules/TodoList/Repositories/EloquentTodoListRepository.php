@@ -48,7 +48,8 @@ class EloquentTodoListRepository implements RepositoryContract
 
     public function paginate($count)
     {
-        return TodoList::paginate($count);
+        $user_id = func_get_arg(1);
+        return TodoList::where('user_id', $user_id)->paginate($count);
     }
 
     public function getOne($id)
