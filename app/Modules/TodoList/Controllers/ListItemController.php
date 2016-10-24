@@ -42,4 +42,10 @@ class ListItemController extends Controller
         $response = $this->service->show($items);
         return response()->collectionJson($response, 200);
     }
+
+    public function destroy($list, $items)
+    {
+        $response = $this->service->delete($items);
+        return response()->collectionJson($response, 204);
+    }
 }

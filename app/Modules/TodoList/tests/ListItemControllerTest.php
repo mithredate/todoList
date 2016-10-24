@@ -74,4 +74,15 @@ class ListItemControllerTest extends TestCase
 
         $this->assertResponseStatus(200);
     }
+
+    public function testDelete()
+    {
+        $item = factory(ListItem::class)->create([
+            'list_id' => $this->list->id
+        ]);
+
+        $this->json('DELETE',action('\App\Modules\TodoList\Controllers\ListItemController@show',['list' => $this->list->id, 'items' => $item->id]));
+
+        $this->assertResponseStatus(204);
+    }
 }
