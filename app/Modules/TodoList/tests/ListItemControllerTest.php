@@ -63,4 +63,15 @@ class ListItemControllerTest extends TestCase
 
         $this->assertResponseStatus(200);
     }
+
+    public function testShow()
+    {
+        $item = factory(ListItem::class)->create([
+            'list_id' => $this->list->id
+        ]);
+
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\ListItemController@show',['list' => $this->list->id, 'items' => $item->id]));
+
+        $this->assertResponseStatus(200);
+    }
 }
