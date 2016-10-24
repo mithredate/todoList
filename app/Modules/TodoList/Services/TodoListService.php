@@ -16,6 +16,7 @@ use App\Modules\TodoList\Http\ErrorResponse;
 use App\Modules\TodoList\Http\ItemResponse;
 use App\Modules\TodoList\Models\TodoList;
 use App\Modules\TodoList\Policies\TodoListPolicy;
+use App\Modules\TodoList\Traits\ServiceAuthorization;
 use App\User;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -23,11 +24,14 @@ use Illuminate\Validation\UnauthorizedException;
 class TodoListService implements ControllerServices
 {
 
+    use ServiceAuthorization;
+
     protected $repository;
 
     protected $create_href;
     protected $view_single_href;
     protected $list_item_href;
+    protected $user;
     /**
      * @var CollectionResponse
      */
@@ -59,17 +63,20 @@ class TodoListService implements ControllerServices
         $this->errorResponse = $errorResponse;
     }
 
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+    }
+
     public function create($data)
     {
-        $user_id = func_get_arg(1);
-        $todoList = $this->repository->create($data, $user_id);
+        $todoList = $this->repository->create($data, $this->user->id);
         return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 
     public function index()
     {
-        $user_id = func_get_arg(0);
-        $todoList = $this->repository->paginate(config('app.pagination_count'), $user_id);
+        $todoList = $this->repository->paginate(config('app.pagination_count'), $this->user->id);
         return $this->collectionResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href);
 
     }
@@ -77,24 +84,22 @@ class TodoListService implements ControllerServices
     public function update($data, $id)
     {
         try {
-            $user = func_get_arg(2);
-            $this->authorize('update', $user, $id);
+            $this->authorize('update', $this->user, $id, TodoList::class);
             $todoList = $this->repository->update($data, $id);
             return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href, [], $this->getListItemHref($todoList));
         } catch (\Exception $e){
-            return $this->prepareErrorResponse($e);
+            return $this->prepareErrorResponse($this->errorResponse, $e);
         }
     }
 
     public function delete($id)
     {
         try {
-            $user = func_get_arg(1);
-            $this->authorize('delete',$user,$id);
+            $this->authorize('delete',$this->user,$id, TodoList::class);
             $this->repository->delete($id);
             return null;
         } catch (\Exception $e){
-            return $this->prepareErrorResponse($e);
+            return $this->prepareErrorResponse($this->errorResponse, $e);
         }
     }
 
@@ -116,26 +121,7 @@ class TodoListService implements ControllerServices
         return $links;
     }
 
-    private function authorize($method, $user, $list_id)
-    {
-        $list = TodoList::find($list_id);
-        if ($user->cant($method, $list)) {
-            throw new UnauthorizedException("You are not authorized to $method the resource", 403);
-        }
-    }
-
-    /**
-     * @param $e
-     * @return array
-     */
-    private function prepareErrorResponse(\Exception $e)
-    {
-        return $this->errorResponse->render($this->create_href, [], null, null, [], [], [
-            'title' => get_class($e),
-            'code' => $e->getCode(),
-            'message' => $e->getMessage()
-        ]);
-    }
+    
 
 
 }

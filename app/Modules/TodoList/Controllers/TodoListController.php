@@ -3,6 +3,7 @@
 namespace App\Modules\TodoList\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\TodoList\Contracts\ControllerServices;
 use App\Modules\TodoList\Requests\CreateTodoListRequest;
 use App\Modules\TodoList\Requests\UpdateTodoListRequest;
 use App\Modules\TodoList\Services\TodoListService;
@@ -14,9 +15,10 @@ class TodoListController extends Controller
 
     protected $service;
 
-    public function __construct(TodoListService $service)
+    public function __construct(ControllerServices $service)
     {
         $this->service = $service;
+//        $this->service->setUser($request->user());
     }
 
 
