@@ -94,7 +94,15 @@ class TodoListServiceTest extends TestCase
         $this->validateResponseLinks($response);
     }
 
-    
+    public function testUnauthorizedShow()
+    {
+        $list = factory(TodoList::class)->create();
+
+        $response = $this->service->show($list->id);
+
+        $this->validateResponse($response);
+        $this->validateResponseError($response);
+    }
 
 
 }
