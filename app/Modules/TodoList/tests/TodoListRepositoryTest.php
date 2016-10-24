@@ -74,23 +74,29 @@ class TodoListRepositoryTest extends TestCase
     }
 
     public function testGetAllTodoList(){
-        $todoList = factory(TodoList::class)->times(50)->create();
-        $list = $this->repository->getAll();
-        $this->assertGreaterThan(50, $list->count());
+        factory(TodoList::class)->times(50)->create();
+        $todoList = factory(TodoList::class)->times(10)->create([
+            'user_id' => $this->user->id
+        ]);
+        $list = $this->repository->getAll($this->user->id);
+        $this->assertEquals(10, $list->count());
     }
 
     public function testPaginateTodoList(){
-        $todoList = factory(TodoList::class)->times(50)->create([
+        factory(TodoList::class)->times(20)->create();
+        $todoList = factory(TodoList::class)->times(30)->create([
             'user_id' => $this->user->id
         ]);
         $list = $this->repository->paginate(10, $this->user->id);
         $this->assertEquals(10, $list->count());
-        $this->assertEquals(50, $list->total());
+        $this->assertEquals(30, $list->total());
     }
 
     public function testGetOne()
     {
-        $list = factory(TodoList::class)->create();
+        $list = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
 
         $list->load('user');
 

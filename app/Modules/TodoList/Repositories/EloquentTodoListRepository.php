@@ -11,6 +11,7 @@ namespace App\Modules\TodoList\Repositories;
 
 use App\Modules\TodoList\Contracts\RepositoryContract;
 use App\Modules\TodoList\Models\TodoList;
+use App\User;
 
 class EloquentTodoListRepository implements RepositoryContract
 {
@@ -42,7 +43,8 @@ class EloquentTodoListRepository implements RepositoryContract
 
     public function getAll()
     {
-        $todoList = TodoList::all();
+        $user_id = func_get_arg(0);
+        $todoList = TodoList::where('user_id',$user_id)->get();
         return $todoList;
     }
 
