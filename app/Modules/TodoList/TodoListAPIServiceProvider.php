@@ -44,6 +44,7 @@ class TodoListAPIServiceProvider extends ServiceProvider
         CollectionResponse::class,
         ItemResponse::class,
         ListItemService::class,
+        TodoListService::class
     ];
 
 
