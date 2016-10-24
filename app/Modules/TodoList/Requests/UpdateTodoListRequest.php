@@ -14,8 +14,7 @@ class UpdateTodoListRequest extends FormRequest
      */
     public function authorize()
     {
-        $todoList = TodoList::find($this->route('list'));
-        return $this->user()->can('update',$todoList);
+        return true;
     }
 
     /**

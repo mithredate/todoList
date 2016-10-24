@@ -44,6 +44,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($request->expectsJson()){
+            return resolve(\App\Modules\TodoList\Exceptions\Handler::class)->render($request, $exception);
+        }
         return parent::render($request, $exception);
     }
 
@@ -62,4 +65,5 @@ class Handler extends ExceptionHandler
 
         return redirect()->guest('login');
     }
+
 }

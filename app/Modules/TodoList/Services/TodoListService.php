@@ -79,36 +79,23 @@ class TodoListService implements ControllerServices
 
     public function update($data, $id)
     {
-        try {
-            $this->authorize('update', $this->user, $id, TodoList::class);
-            $todoList = $this->repository->update($data, $id);
-            return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href, [], $this->getListItemHref($todoList));
-        } catch (Exception $e){
-            return $this->prepareErrorResponse($this->errorResponse, $e);
-        }
+        $this->authorize('update', $this->user, $id, TodoList::class);
+        $todoList = $this->repository->update($data, $id);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href, [], $this->getListItemHref($todoList));
     }
 
     public function delete($id)
     {
-        try {
-            $this->authorize('delete',$this->user,$id, TodoList::class);
-            $this->repository->delete($id);
-            return null;
-        } catch (Exception $e){
-            return $this->prepareErrorResponse($this->errorResponse, $e);
-        }
+        $this->authorize('delete',$this->user,$id, TodoList::class);
+        $this->repository->delete($id);
+        return null;
     }
 
     public function show($id)
     {
-        try{
-            $this->authorize('view',$this->user, $id, TodoList::class);
-            $todoList = $this->repository->getOne($id);
-            return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
-        } catch (Exception $e){
-            return $this->prepareErrorResponse($this->errorResponse, $e);
-        }
-
+        $this->authorize('view',$this->user, $id, TodoList::class);
+        $todoList = $this->repository->getOne($id);
+        return $this->itemResponse->render($this->create_href, TodoList::$template, $todoList, $this->view_single_href,[],$this->getListItemHref($todoList));
     }
 
     /**

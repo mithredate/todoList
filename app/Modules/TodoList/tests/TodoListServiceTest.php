@@ -6,6 +6,7 @@ use App\Modules\TodoList\Services\TodoListService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Validation\UnauthorizedException;
 
 class TodoListServiceTest extends TestCase
 {
@@ -58,12 +59,14 @@ class TodoListServiceTest extends TestCase
         $list = factory(TodoList::class)->create();
 
         $data['title'] = 'modified data';
+        try {
+            $response = $this->service->update($data, $list->id);
+        } catch(UnauthorizedException $e){
+            return;
+        }
 
-        $response = $this->service->update($data,$list->id);
+        $this->fail('Unauthorized update on TodoListServiceTest');
 
-        $this->validateResponse($response);
-        
-        $this->validateResponseError($response);
     }
 
     public function testDelete()
@@ -78,11 +81,13 @@ class TodoListServiceTest extends TestCase
     public function testUnauthorizedDelete()
     {
         $list = factory(TodoList::class)->create();
+        try {
+            $response = $this->service->delete($list->id);
+        } catch(UnauthorizedException $e){
+            return;
+        }
 
-        $response = $this->service->delete($list->id);
-
-        $this->validateResponse($response);
-        $this->validateResponseError($response);
+        $this->fail('Unauthorized delete on TodoListServiceTest');
     }
 
     public function testShow(){
@@ -98,10 +103,14 @@ class TodoListServiceTest extends TestCase
     {
         $list = factory(TodoList::class)->create();
 
-        $response = $this->service->show($list->id);
+        try {
+            $response = $this->service->show($list->id);
+        } catch(UnauthorizedException $e){
+            return;
+        }
 
-        $this->validateResponse($response);
-        $this->validateResponseError($response);
+        $this->fail('Unauthorized show on TodoListServiceTest');
+
     }
 
 

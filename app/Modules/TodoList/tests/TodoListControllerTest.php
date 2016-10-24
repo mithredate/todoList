@@ -5,6 +5,7 @@ use App\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Validation\UnauthorizedException;
 
 class TodoListControllerTest extends TestCase
 {
@@ -58,7 +59,7 @@ class TodoListControllerTest extends TestCase
 
     }
 
-    public function testNonAuthorizedUpdateTodoList()
+    public function testUnauthorizedUpdateTodoList()
     {
         $todoList = factory(TodoList::class)->create();
 
@@ -73,13 +74,19 @@ class TodoListControllerTest extends TestCase
             'user_id' => $this->user->id
         ]);
 
-        $mock = $this->mock(\App\Modules\TodoList\Contracts\RepositoryContract::class);
-        $mock->shouldReceive('delete')->once()->with($todoList->id)->andReturn(true);
-
-        $this->json('DELETE',action('\App\Modules\TodoList\Controllers\TodoListController@show',['id' => $todoList->id]));
+        $this->json('DELETE',action('\App\Modules\TodoList\Controllers\TodoListController@show',['list' => $todoList->id]));
 
         $this->assertResponseStatus(204);
 
+    }
+
+    public function testUnauthorizedDelete()
+    {
+        $list = factory(TodoList::class)->create();
+
+        $this->json('DELETE', action('\App\Modules\TodoList\Controllers\TodoListController@show', ['list' => $list->id]));
+
+       $this->assertResponseStatus(403);
     }
 
     private function validateTitleMaxLength()
@@ -115,7 +122,9 @@ class TodoListControllerTest extends TestCase
 
     public function testShow()
     {
-        $list = factory(TodoList::class)->create();
+        $list = factory(TodoList::class)->create([
+            'user_id' => $this->user->id
+        ]);
         $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@show',['list' => $list->id]));
         $this->assertResponseStatus(200);
     }

@@ -6,16 +6,24 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ApiAuthTest extends TestCase
 {
-    public function testAuthentication()
+    use DatabaseTransactions;
+
+    public function testUnauthenticated()
     {
         $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index'))
-            ->seeJson(['error' => 'Unauthenticated.']);
+            ->seeJson(['error' => ['title' => 'Unauthenticated', 'code' => 401, 'message' => 'Access is denied']])
+            ->seeStatusCode(401);
 
-        $user = \App\User::find(1);
+    }
+
+    public function testAuthenticated()
+    {
+        $user = factory(\App\User::class)->create();
 
         $token = $user->api_token;
 
-        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index',['Authorization' => "Bearer $token"]))
-            ->dontSeejson(['error' => 'Unauthenticated.']);
+        $this->json('GET',action('\App\Modules\TodoList\Controllers\TodoListController@index'),[],['Authorization' => "Bearer $token"])
+            ->seeStatusCode(200);
+
     }
 }
